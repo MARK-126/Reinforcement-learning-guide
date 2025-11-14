@@ -13,6 +13,7 @@ Una guía completa y profesional para dominar Reinforcement Learning desde los f
 
 - [✨ Características Principales](#-características-principales)
 - [🎯 Para Quién es Este Repositorio](#-para-quién-es-este-repositorio)
+- [🆕 **Contenido Preparatorio para Principiantes**](#-requisitos-previos) ⭐ **NUEVO**
 - [📊 Estadísticas del Proyecto](#-estadísticas-del-proyecto)
 - [🗂️ Notebooks Interactivos](#️-notebooks-interactivos)
 - [✅ Algoritmos Implementados](#-algoritmos-implementados)
@@ -71,9 +72,24 @@ Los 6 notebooks incluidos siguen el formato profesional de cursos de DeepLearnin
 
 ### 📋 Requisitos Previos
 
+#### 🆕 ¿Eres Principiante Absoluto?
+
+**¡Ahora incluimos contenido preparatorio completo!** Si no tienes experiencia previa en matemáticas, programación o ML, comienza con nuestra nueva sección:
+
+**👉 [00_prerequisites/](00_prerequisites/)** - Contenido desde cero:
+- **Matemáticas Básicas**: Probabilidad, estadística, notación matemática, descuento geométrico
+- **Álgebra Lineal**: Vectores, matrices, operaciones, NumPy práctico
+- **Cálculo**: Derivadas, gradientes, chain rule, backpropagation
+- **Python & NumPy**: Programación esencial para RL con ejemplos prácticos
+- **Optimización**: Gradient descent, Adam, learning rates, hiperparámetros
+
+**Tiempo estimado**: 4-6 semanas (10 hrs/semana) para principiantes absolutos
+
+#### Para Usuarios con Experiencia
+
 **Conocimientos:**
 - Python intermedio (clases, decoradores, tipo hints)
-- Matemáticas: Álgebra lineal, Cálculo, Probabilidad
+- Matemáticas: Álgebra lineal, Cálculo, Probabilidad básica
 - (Opcional) PyTorch básico - se enseña en los notebooks
 
 **Software:**
@@ -342,6 +358,14 @@ python train_advanced.py
 
 ```
 Reinforcement-learning-guide/
+│
+├── 🎓 00_prerequisites/ ⭐ NUEVO      # Contenido Preparatorio para Principiantes
+│   ├── README.md                      # Guía de navegación y rutas de estudio
+│   ├── 01_matematicas_basicas.md      # Probabilidad, estadística, notación
+│   ├── 02_algebra_lineal.md           # Vectores, matrices, NumPy
+│   ├── 03_calculo_basico.md           # Derivadas, gradientes, chain rule
+│   ├── 04_python_numpy.md             # Python esencial para RL
+│   └── 05_conceptos_optimizacion.md   # Gradient descent, Adam, hiperparámetros
 │
 ├── 📚 notebooks/                      # 6 Notebooks Profesionales (260 KB)
 │   ├── 01_dynamic_programming_tutorial.ipynb    # DP (47 KB, 5 ejercicios)
