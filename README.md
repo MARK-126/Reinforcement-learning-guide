@@ -130,6 +130,14 @@ Este repositorio incluye **notebooks interactivos estilo Coursera/DeepLearning.A
   - Ejercicio 5: Loop de entrenamiento Double DQN completo
   - Tests: `double_dqn_tests.py`
 
+- **Dueling_DQN_Exercise.ipynb**: Dueling DQN (arquitectura dual V + A)
+  - Ejercicio 1: DuelingQNetwork (value y advantage streams separados)
+  - Ejercicio 2: Replay Buffer
+  - Ejercicio 3: Compute Dueling DQN Loss (Double DQN con arquitectura dual)
+  - Ejercicio 4: Update Target Network
+  - Ejercicio 5: Loop de entrenamiento Dueling DQN completo
+  - Tests: `dueling_dqn_tests.py`
+
 #### 03_deep_rl/policy_gradient/
 - **REINFORCE_Exercise.ipynb**: Implementa REINFORCE (Policy Gradient)
   - Ejercicio 1: PolicyNetwork (red neuronal para política estocástica)
@@ -145,6 +153,22 @@ Este repositorio incluye **notebooks interactivos estilo Coursera/DeepLearning.A
   - Ejercicio 4: Compute Actor-Critic Loss (TD error como advantage)
   - Ejercicio 5: Loop de entrenamiento Actor-Critic (actualización online)
   - Tests: `actor_critic_tests.py`
+
+- **A2C_Exercise.ipynb**: A2C - Advantage Actor-Critic (n-step returns)
+  - Ejercicio 1: Compute N-Step Returns (ventajas n-step)
+  - Ejercicio 2: A2CActorNetwork (arquitectura Actor)
+  - Ejercicio 3: A2CCriticNetwork (arquitectura Critic)
+  - Ejercicio 4: Compute A2C Loss (ventajas con n-step returns)
+  - Ejercicio 5: Train A2C (actualización cada n pasos)
+  - Tests: `a2c_tests.py`
+
+- **PPO_Exercise.ipynb**: PPO - Proximal Policy Optimization (SOTA)
+  - Ejercicio 1: Compute GAE (Generalized Advantage Estimation)
+  - Ejercicio 2: PPOActorNetwork (arquitectura Actor)
+  - Ejercicio 3: PPOCriticNetwork (arquitectura Critic)
+  - Ejercicio 4: Compute PPO Loss (clipped surrogate objective)
+  - Ejercicio 5: Train PPO (multi-epoch updates con mini-batches)
+  - Tests: `ppo_tests.py`
 
 ### Cómo Usar los Notebooks
 
