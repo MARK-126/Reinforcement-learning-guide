@@ -84,6 +84,14 @@ Este repositorio incluye **notebooks interactivos estilo Coursera/DeepLearning.A
   - Ejercicio 5: Algoritmo completo con convergencia
   - Tests: `value_iteration_tests.py`
 
+- **Policy_Iteration_Exercise.ipynb**: Implementa Policy Iteration (Programación Dinámica)
+  - Ejercicio 1: Inicialización de política uniforme aleatoria
+  - Ejercicio 2: Policy Evaluation Step (Bellman Expectation)
+  - Ejercicio 3: Policy Evaluation completa hasta convergencia
+  - Ejercicio 4: Policy Improvement (greedy policy)
+  - Ejercicio 5: Algoritmo completo Policy Iteration
+  - Tests: `policy_iteration_tests.py`
+
 #### 02_algoritmos_clasicos/monte_carlo/
 - **Monte_Carlo_Control_Exercise.ipynb**: Implementa Monte Carlo Control
   - Ejercicio 1: Generación de episodios con política epsilon-greedy
@@ -114,6 +122,14 @@ Este repositorio incluye **notebooks interactivos estilo Coursera/DeepLearning.A
   - Ejercicio 4: Loop de entrenamiento DQN
   - Tests: `dqn_tests.py`
 
+- **Double_DQN_Exercise.ipynb**: Double DQN (reduce sobreestimación de Q-values)
+  - Ejercicio 1: Q-Network (misma arquitectura que DQN)
+  - Ejercicio 2: Replay Buffer
+  - Ejercicio 3: Double DQN Loss (acción selección vs evaluación)
+  - Ejercicio 4: Update Target Network
+  - Ejercicio 5: Loop de entrenamiento Double DQN completo
+  - Tests: `double_dqn_tests.py`
+
 #### 03_deep_rl/policy_gradient/
 - **REINFORCE_Exercise.ipynb**: Implementa REINFORCE (Policy Gradient)
   - Ejercicio 1: PolicyNetwork (red neuronal para política estocástica)
@@ -121,6 +137,14 @@ Este repositorio incluye **notebooks interactivos estilo Coursera/DeepLearning.A
   - Ejercicio 3: Cálculo de Policy Loss con baseline
   - Ejercicio 4: Loop de entrenamiento REINFORCE completo
   - Tests: `reinforce_tests.py`
+
+- **Actor_Critic_Exercise.ipynb**: Implementa Actor-Critic (reduce varianza vs REINFORCE)
+  - Ejercicio 1: ActorNetwork (política estocástica)
+  - Ejercicio 2: CriticNetwork (función de valor V(s))
+  - Ejercicio 3: Selección de acciones con log probability
+  - Ejercicio 4: Compute Actor-Critic Loss (TD error como advantage)
+  - Ejercicio 5: Loop de entrenamiento Actor-Critic (actualización online)
+  - Tests: `actor_critic_tests.py`
 
 ### Cómo Usar los Notebooks
 
