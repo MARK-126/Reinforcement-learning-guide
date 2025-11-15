@@ -7,9 +7,10 @@ Una guía completa y estructurada para aprender Reinforcement Learning (Aprendiz
 1. [Introducción](#introducción)
 2. [Requisitos Previos](#requisitos-previos)
 3. [Instalación](#instalación)
-4. [Estructura del Repositorio](#estructura-del-repositorio)
-5. [Ruta de Aprendizaje](#ruta-de-aprendizaje)
-6. [Recursos Adicionales](#recursos-adicionales)
+4. [Notebooks Interactivos (Ejercicios Fill-in-the-Blank)](#-notebooks-interactivos-ejercicios-fill-in-the-blank)
+5. [Estructura del Repositorio](#estructura-del-repositorio)
+6. [Ruta de Aprendizaje](#ruta-de-aprendizaje)
+7. [Recursos Adicionales](#recursos-adicionales)
 
 ## 🎯 Introducción
 
@@ -59,6 +60,162 @@ pip install -r requirements.txt
 ```bash
 python -c "import gym; import torch; print('✓ Instalación exitosa')"
 ```
+
+## 📓 Notebooks Interactivos (Ejercicios Fill-in-the-Blank)
+
+Este repositorio incluye **notebooks interactivos estilo Coursera/DeepLearning.AI** para los algoritmos principales. Estos notebooks están diseñados con una pedagogía guiada que incluye:
+
+### Características de los Notebooks
+
+✅ **Explicaciones intercaladas**: Teoría mezclada con código
+✅ **Ejercicios fill-in-the-blank**: Completa el código en secciones marcadas
+✅ **Tests automáticos**: Valida tu implementación con outputs esperados
+✅ **Visualizaciones embebidas**: Gráficos para entender el aprendizaje
+✅ **Formato guiado**: Paso a paso desde conceptos hasta implementación completa
+
+### Notebooks Disponibles
+
+#### 02_algoritmos_clasicos/temporal_difference/
+- **Q_Learning_Exercise.ipynb**: Implementa Q-Learning desde cero
+  - Ejercicio 1: Inicialización de Q-table
+  - Ejercicio 2: Política epsilon-greedy
+  - Ejercicio 3: Regla de actualización Q-Learning
+  - Ejercicio 4: Loop de entrenamiento completo
+  - Tests: `q_learning_tests.py`
+
+- **SARSA_Exercise.ipynb**: Implementa SARSA y compáralo con Q-Learning
+  - Ejercicio 1: Regla de actualización SARSA (on-policy)
+  - Ejercicio 2: Loop de entrenamiento SARSA
+  - Comparación: CliffWalking environment (SARSA vs Q-Learning)
+  - Tests: `sarsa_tests.py`
+
+#### 03_deep_rl/dqn/
+- **DQN_Exercise.ipynb**: Deep Q-Network con PyTorch
+  - Ejercicio 1: Arquitectura de Q-Network
+  - Ejercicio 2: Experience Replay Buffer
+  - Ejercicio 3: Cálculo de TD Loss
+  - Ejercicio 4: Loop de entrenamiento DQN
+  - Tests: `dqn_tests.py`
+
+### Cómo Usar los Notebooks
+
+1. **Abrir el notebook**:
+   ```bash
+   jupyter notebook 02_algoritmos_clasicos/temporal_difference/Q_Learning_Exercise.ipynb
+   ```
+
+2. **Leer las explicaciones**: Cada sección tiene teoría y contexto
+
+3. **Completar los ejercicios**: Busca los comentarios:
+   ```python
+   # GRADED FUNCTION: nombre_funcion
+
+   def nombre_funcion(params):
+       # (approx. 3 lines)
+       # Instrucciones claras de qué hacer
+
+       # YOUR CODE STARTS HERE
+
+
+       # YOUR CODE ENDS HERE
+
+       return resultado
+   ```
+
+4. **Ejecutar los tests**: Cada ejercicio tiene una celda de test:
+   ```python
+   nombre_funcion_test(nombre_funcion)
+   ```
+
+5. **Ver el resultado**: Los tests te dirán si tu implementación es correcta
+
+### Estructura de un Ejercicio
+
+```python
+# GRADED FUNCTION: q_learning_update
+
+def q_learning_update(Q, state, action, reward, next_state, done, alpha, gamma):
+    """
+    Update Q-table using Q-Learning rule.
+
+    Arguments:
+    Q -- Q-table, numpy array of shape (n_states, n_actions)
+    state -- current state
+    action -- action taken
+    reward -- reward received
+    next_state -- next state
+    done -- boolean, True if next_state is terminal
+    alpha -- learning rate
+    gamma -- discount factor
+
+    Returns:
+    Q -- updated Q-table
+    td_error -- TD error (for tracking)
+    """
+    # (approx. 5-7 lines)
+    # Step 1: Get current Q-value
+    # Step 2: Calculate TD target (if done: r, else: r + gamma * max Q(s',a'))
+    # Step 3: Calculate TD error
+    # Step 4: Update Q-value
+
+    # YOUR CODE STARTS HERE
+    current_q = Q[state, action]
+
+    if done:
+        target_q = reward
+    else:
+        target_q = reward + gamma * np.max(Q[next_state])
+
+    td_error = target_q - current_q
+    Q[state, action] = current_q + alpha * td_error
+    # YOUR CODE ENDS HERE
+
+    return Q, td_error
+```
+
+### Tests Automáticos
+
+Cada función tiene tests que verifican:
+- ✅ **Tipo de datos**: ¿Devuelve numpy array?
+- ✅ **Forma (shape)**: ¿Dimensiones correctas?
+- ✅ **Valores**: ¿Cálculos correctos con casos de prueba?
+
+Ejemplo de output de test:
+```
+Testing q_learning_update...
+Non-terminal update:
+  Q[0,0] before: 0.0000
+  Q[0,0] after: 0.1450
+  TD error: 1.4500
+
+Terminal update:
+  Q[0,0] after: 0.1000
+  TD error: 1.0000
+
+✅ All tests passed!
+```
+
+### Ventajas del Formato Interactivo
+
+1. **Aprendizaje Activo**: Escribes código, no solo lo lees
+2. **Feedback Inmediato**: Los tests te dicen si vas bien
+3. **Progresión Guiada**: De simple a complejo, paso a paso
+4. **Validación Rigurosa**: Tests con valores esperados exactos
+5. **Visualización**: Gráficos para entender el comportamiento
+
+### Diferencia con Archivos `.py` Existentes
+
+| Aspecto | Archivos `.py` | Notebooks `_Exercise.ipynb` |
+|---------|----------------|----------------------------|
+| Código | Completo, listo para ejecutar | Ejercicios para completar |
+| Uso | Referencia, lectura | Aprendizaje interactivo |
+| Tests | No incluidos | Tests automáticos integrados |
+| Teoría | Docstrings | Explicaciones markdown extensas |
+| Público | Avanzado | Principiantes/Intermedios |
+
+**Recomendación**:
+- 📚 **Principiantes**: Empiecen con los notebooks `_Exercise.ipynb`
+- 🔧 **Avanzados**: Usen los archivos `.py` como referencia o para proyectos
 
 ## 📁 Estructura del Repositorio
 
