@@ -75,6 +75,23 @@ Este repositorio incluye **notebooks interactivos estilo Coursera/DeepLearning.A
 
 ### Notebooks Disponibles
 
+#### 02_algoritmos_clasicos/dynamic_programming/
+- **Value_Iteration_Exercise.ipynb**: Implementa Value Iteration (Programación Dinámica)
+  - Ejercicio 1: Inicialización de función de valor
+  - Ejercicio 2: Bellman Optimality Backup (actualización de un estado)
+  - Ejercicio 3: Extracción de política greedy desde V
+  - Ejercicio 4: Value Iteration Sweep (barrido completo)
+  - Ejercicio 5: Algoritmo completo con convergencia
+  - Tests: `value_iteration_tests.py`
+
+#### 02_algoritmos_clasicos/monte_carlo/
+- **Monte_Carlo_Control_Exercise.ipynb**: Implementa Monte Carlo Control
+  - Ejercicio 1: Generación de episodios con política epsilon-greedy
+  - Ejercicio 2: Cálculo de returns (retornos descontados)
+  - Ejercicio 3: Actualización de Q-values (First-Visit MC)
+  - Ejercicio 4: Algoritmo completo Monte Carlo Control
+  - Tests: `monte_carlo_tests.py`
+
 #### 02_algoritmos_clasicos/temporal_difference/
 - **Q_Learning_Exercise.ipynb**: Implementa Q-Learning desde cero
   - Ejercicio 1: Inicialización de Q-table
@@ -96,6 +113,14 @@ Este repositorio incluye **notebooks interactivos estilo Coursera/DeepLearning.A
   - Ejercicio 3: Cálculo de TD Loss
   - Ejercicio 4: Loop de entrenamiento DQN
   - Tests: `dqn_tests.py`
+
+#### 03_deep_rl/policy_gradient/
+- **REINFORCE_Exercise.ipynb**: Implementa REINFORCE (Policy Gradient)
+  - Ejercicio 1: PolicyNetwork (red neuronal para política estocástica)
+  - Ejercicio 2: Selección de acciones desde distribución
+  - Ejercicio 3: Cálculo de Policy Loss con baseline
+  - Ejercicio 4: Loop de entrenamiento REINFORCE completo
+  - Tests: `reinforce_tests.py`
 
 ### Cómo Usar los Notebooks
 
