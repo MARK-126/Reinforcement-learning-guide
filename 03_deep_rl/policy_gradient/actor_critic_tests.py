@@ -10,23 +10,23 @@ import gymnasium as gym
 
 
 def actor_network_test(ActorNetwork):
-    """Test ActorNetwork class"""
+    """Test para para ActorNetwork class"""
     print("Testing ActorNetwork...")
 
     state_dim, action_dim = 4, 2
     actor = ActorNetwork(state_dim, action_dim, hidden_dim=64)
 
     # Check network structure
-    assert hasattr(actor, 'fc1'), "Actor should have fc1 layer"
-    assert hasattr(actor, 'fc2'), "Actor should have fc2 layer"
-    assert isinstance(actor.fc1, nn.Linear), "fc1 should be Linear layer"
-    assert isinstance(actor.fc2, nn.Linear), "fc2 should be Linear layer"
+    assert hasattr(actor, 'fc1'), "Actor debe have fc1 layer"
+    assert hasattr(actor, 'fc2'), "Actor debe have fc2 layer"
+    assert isinstance(actor.fc1, nn.Linear), "❌ fc1 debe ser Linear layer"
+    assert isinstance(actor.fc2, nn.Linear), "❌ fc2 debe ser Linear layer"
 
     # Check dimensions
-    assert actor.fc1.in_features == state_dim, f"fc1 input should be {state_dim}"
-    assert actor.fc1.out_features == 64, "fc1 output should be 64"
-    assert actor.fc2.in_features == 64, "fc2 input should be 64"
-    assert actor.fc2.out_features == action_dim, f"fc2 output should be {action_dim}"
+    assert actor.fc1.in_features == state_dim, f"❌ fc1 input debe ser {state_dim}"
+    assert actor.fc1.out_features == 64, "❌ fc1 output debe ser 64"
+    assert actor.fc2.in_features == 64, "❌ fc2 input debe ser 64"
+    assert actor.fc2.out_features == action_dim, f"❌ fc2 output debe ser {action_dim}"
 
     print(f"  ✓ Network structure correct")
     print(f"    fc1: {state_dim} → 64")
@@ -37,11 +37,11 @@ def actor_network_test(ActorNetwork):
     action_probs = actor(state)
 
     # Check output
-    assert action_probs.shape == (1, action_dim), f"Expected shape (1, {action_dim}), got {action_probs.shape}"
+    assert action_probs.shape == (1, action_dim), f"❌ Esperado: shape (1, {action_dim}), Obtenido: {action_probs.shape}"
     assert torch.allclose(action_probs.sum(), torch.tensor(1.0), atol=1e-5), \
-        f"Probabilities should sum to 1.0, got {action_probs.sum()}"
+        f"Probabilities debe sum to 1.0, obtenido {action_probs.sum()}"
     assert torch.all(action_probs >= 0) and torch.all(action_probs <= 1), \
-        "Probabilities should be in [0, 1]"
+        "❌ Probabilities debe ser in [0, 1]"
 
     print(f"  ✓ Forward pass correct")
     print(f"    Output shape: {action_probs.shape}")
@@ -53,27 +53,27 @@ def actor_network_test(ActorNetwork):
     batch_probs = actor(batch_state)
     assert batch_probs.shape == (10, action_dim)
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def critic_network_test(CriticNetwork):
-    """Test CriticNetwork class"""
+    """Test para para CriticNetwork class"""
     print("Testing CriticNetwork...")
 
     state_dim = 4
     critic = CriticNetwork(state_dim, hidden_dim=64)
 
     # Check network structure
-    assert hasattr(critic, 'fc1'), "Critic should have fc1 layer"
-    assert hasattr(critic, 'fc2'), "Critic should have fc2 layer"
-    assert isinstance(critic.fc1, nn.Linear), "fc1 should be Linear layer"
-    assert isinstance(critic.fc2, nn.Linear), "fc2 should be Linear layer"
+    assert hasattr(critic, 'fc1'), "Critic debe have fc1 layer"
+    assert hasattr(critic, 'fc2'), "Critic debe have fc2 layer"
+    assert isinstance(critic.fc1, nn.Linear), "❌ fc1 debe ser Linear layer"
+    assert isinstance(critic.fc2, nn.Linear), "❌ fc2 debe ser Linear layer"
 
     # Check dimensions
-    assert critic.fc1.in_features == state_dim, f"fc1 input should be {state_dim}"
-    assert critic.fc1.out_features == 64, "fc1 output should be 64"
-    assert critic.fc2.in_features == 64, "fc2 input should be 64"
-    assert critic.fc2.out_features == 1, "fc2 output should be 1 (value)"
+    assert critic.fc1.in_features == state_dim, f"❌ fc1 input debe ser {state_dim}"
+    assert critic.fc1.out_features == 64, "❌ fc1 output debe ser 64"
+    assert critic.fc2.in_features == 64, "❌ fc2 input debe ser 64"
+    assert critic.fc2.out_features == 1, "❌ fc2 output debe ser 1 (value)"
 
     print(f"  ✓ Network structure correct")
     print(f"    fc1: {state_dim} → 64")
@@ -85,8 +85,8 @@ def critic_network_test(CriticNetwork):
 
     # Check output
     assert value.shape == (1,) or value.shape == (), \
-        f"Expected scalar or shape (1,), got {value.shape}"
-    assert isinstance(value.item(), float), "Value should be a float"
+        f"❌ Esperado: scalar or shape (1,), Obtenido: {value.shape}"
+    assert isinstance(value.item(), float), "❌ Value debe ser a float"
 
     print(f"  ✓ Forward pass correct")
     print(f"    Output shape: {value.shape}")
@@ -99,11 +99,11 @@ def critic_network_test(CriticNetwork):
 
     print(f"  ✓ Batch processing works")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def select_action_test(select_action, ActorNetwork):
-    """Test select_action function"""
+    """Test para para select_action function"""
     print("Testing select_action...")
 
     state_dim, action_dim = 4, 2
@@ -114,14 +114,14 @@ def select_action_test(select_action, ActorNetwork):
     action, log_prob = select_action(actor, state)
 
     # Check action
-    assert isinstance(action, (int, np.integer)), f"Action should be int, got {type(action)}"
+    assert isinstance(action, (int, np.integer)), f"❌ Action debe ser int, obtenido {type(action)}"
     assert 0 <= action < action_dim, f"Action {action} out of range [0, {action_dim})"
 
     # Check log_prob
-    assert isinstance(log_prob, torch.Tensor), "log_prob should be torch.Tensor"
-    assert log_prob.requires_grad, "log_prob should require grad for backprop"
-    assert log_prob.dim() == 0 or log_prob.shape == (1,), "log_prob should be scalar"
-    assert log_prob.item() <= 0, f"log probability should be <= 0, got {log_prob.item()}"
+    assert isinstance(log_prob, torch.Tensor), "❌ log_prob debe ser torch.Tensor"
+    assert log_prob.requires_grad, "log_prob debe require grad for backprop"
+    assert log_prob.dim() == 0 or log_prob.shape == (1,), "❌ log_prob debe ser scalar"
+    assert log_prob.item() <= 0, f"❌ log probability debe ser <= 0, obtenido {log_prob.item()}"
 
     print(f"  ✓ Basic functionality correct")
     print(f"    Action: {action}")
@@ -135,16 +135,16 @@ def select_action_test(select_action, ActorNetwork):
 
     unique_actions = len(set(actions))
     print(f"  ✓ Stochasticity check: {unique_actions} unique actions in 100 samples")
-    assert unique_actions > 1, "Should sample different actions (stochastic policy)"
+    assert unique_actions > 1, "Debe sample different actions (stochastic policy)"
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def compute_ac_loss_test(compute_ac_loss):
-    """Test compute_ac_loss function"""
+    """Test para para compute_ac_loss function"""
     print("Testing compute_ac_loss...")
 
-    # Test case 1: Non-terminal transition
+    # Test 1: Non-terminal transition
     log_prob = torch.tensor(-0.5, requires_grad=True)
     value = torch.tensor(10.0, requires_grad=True)
     next_value = torch.tensor(8.0, requires_grad=True)
@@ -155,12 +155,12 @@ def compute_ac_loss_test(compute_ac_loss):
     actor_loss, critic_loss = compute_ac_loss(log_prob, value, next_value, reward, done, gamma)
 
     # Check types
-    assert isinstance(actor_loss, torch.Tensor), "actor_loss should be torch.Tensor"
-    assert isinstance(critic_loss, torch.Tensor), "critic_loss should be torch.Tensor"
+    assert isinstance(actor_loss, torch.Tensor), "❌ actor_loss debe ser torch.Tensor"
+    assert isinstance(critic_loss, torch.Tensor), "❌ critic_loss debe ser torch.Tensor"
 
     # Check gradients
-    assert actor_loss.requires_grad, "actor_loss should require grad"
-    assert critic_loss.requires_grad, "critic_loss should require grad"
+    assert actor_loss.requires_grad, "actor_loss debe require grad"
+    assert critic_loss.requires_grad, "critic_loss debe require grad"
 
     # TD target = reward + gamma * next_value = 1.0 + 0.99 * 8.0 = 8.92
     # Advantage = 8.92 - 10.0 = -1.08
@@ -181,7 +181,7 @@ def compute_ac_loss_test(compute_ac_loss):
     assert abs(actor_loss.item() - expected_actor_loss) < 0.1, \
         f"Actor loss mismatch: {actor_loss.item()} vs {expected_actor_loss}"
 
-    # Test case 2: Terminal transition
+    # Test 2: Terminal transition
     log_prob2 = torch.tensor(-0.3, requires_grad=True)
     value2 = torch.tensor(5.0, requires_grad=True)
     next_value2 = torch.tensor(0.0, requires_grad=True)  # Ignored for terminal
@@ -206,11 +206,11 @@ def compute_ac_loss_test(compute_ac_loss):
     assert abs(actor_loss2.item() - expected_actor_loss2) < 0.1, \
         "Actor loss incorrect for terminal state"
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def train_actor_critic_test(train_actor_critic, ActorNetwork, CriticNetwork, select_action):
-    """Test train_actor_critic function"""
+    """Test para para train_actor_critic function"""
     print("Testing train_actor_critic...")
 
     # Create simple environment
@@ -232,14 +232,14 @@ def train_actor_critic_test(train_actor_critic, ActorNetwork, CriticNetwork, sel
     )
 
     # Check output
-    assert isinstance(episode_rewards, list), "Should return list of rewards"
-    assert len(episode_rewards) == n_episodes, f"Should have {n_episodes} rewards, got {len(episode_rewards)}"
+    assert isinstance(episode_rewards, list), "Debe return list of rewards"
+    assert len(episode_rewards) == n_episodes, f"Debe have {n_episodes} rewards, obtenido {len(episode_rewards)}"
 
     # Check all rewards are numbers
     for i, reward in enumerate(episode_rewards):
         assert isinstance(reward, (int, float, np.integer, np.floating)), \
-            f"Episode {i}: reward should be number, got {type(reward)}"
-        assert reward > 0, f"Episode {i}: reward should be positive, got {reward}"
+            f"❌ Episode {i}: reward debe ser number, obtenido {type(reward)}"
+        assert reward > 0, f"❌ Episode {i}: reward debe ser positive, obtenido {reward}"
 
     print(f"  ✓ Training completed {n_episodes} episodes")
     print(f"  ✓ Rewards: min={min(episode_rewards):.1f}, max={max(episode_rewards):.1f}, avg={np.mean(episode_rewards):.1f}")
@@ -254,14 +254,14 @@ def train_actor_critic_test(train_actor_critic, ActorNetwork, CriticNetwork, sel
         n_episodes=1, gamma=0.99, max_steps=100
     )
 
-    # At least one parameter should have changed
+    # At least one parameter debe have changed
     actor_changed = any(not torch.allclose(p1, p2) for p1, p2 in zip(initial_actor_params, actor.parameters()))
     critic_changed = any(not torch.allclose(p1, p2) for p1, p2 in zip(initial_critic_params, critic.parameters()))
 
-    assert actor_changed, "Actor parameters should be updated"
-    assert critic_changed, "Critic parameters should be updated"
+    assert actor_changed, "❌ Actor parameters debe ser updated"
+    assert critic_changed, "❌ Critic parameters debe ser updated"
 
     print(f"  ✓ Networks are being updated")
 
     env.close()
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")

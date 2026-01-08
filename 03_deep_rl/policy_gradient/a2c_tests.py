@@ -10,10 +10,10 @@ import gymnasium as gym
 
 
 def compute_n_step_returns_test(compute_n_step_returns):
-    """Test compute_n_step_returns function"""
+    """Test para para compute_n_step_returns function"""
     print("Testing compute_n_step_returns...")
 
-    # Test case 1: Simple 3-step trajectory, no terminal
+    # Test 1: Simple 3-step trajectory, no terminal
     rewards = [1.0, 1.0, 1.0]
     values = [2.0, 2.0, 2.0, 2.0]  # One extra for bootstrap
     dones = [False, False, False]
@@ -22,19 +22,19 @@ def compute_n_step_returns_test(compute_n_step_returns):
 
     returns = compute_n_step_returns(rewards, values, dones, gamma, n_steps)
 
-    # Expected for timestep 0:
+    # Esperado for timestep 0:
     # R_0 = r_0 + gamma*r_1 + gamma^2*V(s_2)
     #     = 1.0 + 0.9*1.0 + 0.81*2.0 = 3.52
     expected_0 = 1.0 + 0.9 * 1.0 + 0.81 * 2.0
 
-    assert len(returns) == len(rewards), f"Returns length should be {len(rewards)}, got {len(returns)}"
-    assert abs(returns[0] - expected_0) < 0.01, f"Return[0] should be ~{expected_0:.2f}, got {returns[0]:.2f}"
+    assert len(returns) == len(rewards), f"❌ Returns length debe ser {len(rewards)}, obtenido {len(returns)}"
+    assert abs(returns[0] - expected_0) < 0.01, f"❌ Return[0] debe ser ~{expected_0:.2f}, obtenido {returns[0]:.2f}"
 
     print(f"  ✓ Non-terminal trajectory correct")
     print(f"    Returns: {[f'{r:.2f}' for r in returns]}")
-    print(f"    Expected R[0]: {expected_0:.2f}, Got: {returns[0]:.2f}")
+    print(f"    Esperado R[0]: {expected_0:.2f}, Got: {returns[0]:.2f}")
 
-    # Test case 2: Trajectory with terminal state
+    # Test 2: Trajectory with terminal state
     rewards = [1.0, 1.0, 10.0]
     values = [0.0, 0.0, 0.0, 0.0]
     dones = [False, False, True]  # Episode ends at step 2
@@ -43,53 +43,53 @@ def compute_n_step_returns_test(compute_n_step_returns):
 
     returns = compute_n_step_returns(rewards, values, dones, gamma, n_steps)
 
-    # Expected for timestep 0:
+    # Esperado for timestep 0:
     # R_0 = r_0 + gamma*r_1 + gamma^2*r_2 (no bootstrap, episode ended)
     #     = 1.0 + 0.9*1.0 + 0.81*10.0 = 10.0
     expected_0_terminal = 1.0 + 0.9 * 1.0 + 0.81 * 10.0
 
     assert abs(returns[0] - expected_0_terminal) < 0.01, \
-        f"Terminal return[0] should be ~{expected_0_terminal:.2f}, got {returns[0]:.2f}"
+        f"❌ Terminal return[0] debe ser ~{expected_0_terminal:.2f}, obtenido {returns[0]:.2f}"
 
-    # Expected for timestep 2 (terminal):
+    # Esperado for timestep 2 (terminal):
     # R_2 = r_2 (just the reward, no future)
     expected_2_terminal = 10.0
     assert abs(returns[2] - expected_2_terminal) < 0.01, \
-        f"Terminal return[2] should be {expected_2_terminal}, got {returns[2]:.2f}"
+        f"❌ Terminal return[2] debe ser {expected_2_terminal}, obtenido {returns[2]:.2f}"
 
     print(f"  ✓ Terminal trajectory correct")
     print(f"    Returns with terminal: {[f'{r:.2f}' for r in returns]}")
 
-    # Test case 3: Different n_steps
+    # Test 3: Different n_steps
     rewards = [1.0] * 10
     values = [0.5] * 11
     dones = [False] * 10
     gamma = 0.99
-    n_steps = 1  # Should behave like 1-step TD
+    n_steps = 1  # Debe behave like 1-step TD
 
     returns_1step = compute_n_step_returns(rewards, values, dones, gamma, n_steps)
     # R_0 = r_0 + gamma*V(s_1) = 1.0 + 0.99*0.5 = 1.495
     expected_1step = 1.0 + 0.99 * 0.5
     assert abs(returns_1step[0] - expected_1step) < 0.01, \
-        f"1-step return should be ~{expected_1step:.2f}, got {returns_1step[0]:.2f}"
+        f"❌ 1-step return debe ser ~{expected_1step:.2f}, obtenido {returns_1step[0]:.2f}"
 
     print(f"  ✓ Different n_steps values work correctly")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def a2c_actor_network_test(A2CActorNetwork):
-    """Test A2CActorNetwork class"""
+    """Test para para A2CActorNetwork class"""
     print("Testing A2CActorNetwork...")
 
     state_dim, action_dim = 4, 2
     actor = A2CActorNetwork(state_dim, action_dim, hidden_dim=64)
 
     # Check structure
-    assert hasattr(actor, 'fc1'), "Actor should have fc1"
-    assert hasattr(actor, 'fc2'), "Actor should have fc2"
-    assert isinstance(actor.fc1, nn.Linear), "fc1 should be Linear"
-    assert isinstance(actor.fc2, nn.Linear), "fc2 should be Linear"
+    assert hasattr(actor, 'fc1'), "Actor debe have fc1"
+    assert hasattr(actor, 'fc2'), "Actor debe have fc2"
+    assert isinstance(actor.fc1, nn.Linear), "❌ fc1 debe ser Linear"
+    assert isinstance(actor.fc2, nn.Linear), "❌ fc2 debe ser Linear"
 
     # Check dimensions
     assert actor.fc1.in_features == state_dim
@@ -107,25 +107,25 @@ def a2c_actor_network_test(A2CActorNetwork):
 
     assert probs.shape == (1, action_dim)
     assert torch.allclose(probs.sum(), torch.tensor(1.0), atol=1e-5), \
-        f"Probabilities should sum to 1.0, got {probs.sum()}"
+        f"Probabilities debe sum to 1.0, obtenido {probs.sum()}"
     assert torch.all(probs >= 0) and torch.all(probs <= 1)
 
     print(f"  ✓ Forward pass correct")
     print(f"    Sample probs: {probs.detach().numpy()[0]}")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def a2c_critic_network_test(A2CCriticNetwork):
-    """Test A2CCriticNetwork class"""
+    """Test para para A2CCriticNetwork class"""
     print("Testing A2CCriticNetwork...")
 
     state_dim = 4
     critic = A2CCriticNetwork(state_dim, hidden_dim=64)
 
     # Check structure
-    assert hasattr(critic, 'fc1'), "Critic should have fc1"
-    assert hasattr(critic, 'fc2'), "Critic should have fc2"
+    assert hasattr(critic, 'fc1'), "Critic debe have fc1"
+    assert hasattr(critic, 'fc2'), "Critic debe have fc2"
 
     # Check dimensions
     assert critic.fc1.in_features == state_dim
@@ -140,7 +140,7 @@ def a2c_critic_network_test(A2CCriticNetwork):
     value = critic(state)
 
     assert value.shape == (1,) or value.shape == (), \
-        f"Value should be scalar or (1,), got {value.shape}"
+        f"❌ Value debe ser scalar or (1,), obtenido {value.shape}"
 
     print(f"  ✓ Forward pass correct")
     print(f"    Sample value: {value.item():.4f}")
@@ -150,11 +150,11 @@ def a2c_critic_network_test(A2CCriticNetwork):
     batch_values = critic(batch_state)
     assert batch_values.shape[0] == 10
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def compute_a2c_loss_test(compute_a2c_loss):
-    """Test compute_a2c_loss function"""
+    """Test para para compute_a2c_loss function"""
     print("Testing compute_a2c_loss...")
 
     # Create sample data
@@ -168,12 +168,12 @@ def compute_a2c_loss_test(compute_a2c_loss):
     )
 
     # Check types
-    assert isinstance(actor_loss, torch.Tensor), "actor_loss should be torch.Tensor"
-    assert isinstance(critic_loss, torch.Tensor), "critic_loss should be torch.Tensor"
-    assert isinstance(total_loss, torch.Tensor), "total_loss should be torch.Tensor"
+    assert isinstance(actor_loss, torch.Tensor), "❌ actor_loss debe ser torch.Tensor"
+    assert isinstance(critic_loss, torch.Tensor), "❌ critic_loss debe ser torch.Tensor"
+    assert isinstance(total_loss, torch.Tensor), "❌ total_loss debe ser torch.Tensor"
 
     # Check requires_grad
-    assert total_loss.requires_grad, "total_loss should require grad"
+    assert total_loss.requires_grad, "total_loss debe require grad"
 
     # Check loss is scalar
     assert actor_loss.dim() == 0 or actor_loss.shape == torch.Size([])
@@ -187,7 +187,7 @@ def compute_a2c_loss_test(compute_a2c_loss):
     # Test gradient flow
     total_loss.backward()
     has_grad = any(lp.grad is not None for lp in log_probs)
-    assert has_grad, "Gradients should flow to log_probs"
+    assert has_grad, "Gradients debe flow to log_probs"
 
     print(f"  ✓ Gradients flow correctly")
 
@@ -200,15 +200,15 @@ def compute_a2c_loss_test(compute_a2c_loss):
         log_probs2, values2, returns2
     )
 
-    # With positive advantages, actor loss should be different
+    # With positive advantages, actor loss debe ser different
     print(f"  ✓ Different advantages produce different losses")
     print(f"    New actor loss: {actor_loss2.item():.4f}")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def train_a2c_test(train_a2c, A2CActorNetwork, A2CCriticNetwork):
-    """Test train_a2c function"""
+    """Test para para train_a2c function"""
     print("Testing train_a2c...")
 
     env = gym.make('CartPole-v1')
@@ -231,13 +231,13 @@ def train_a2c_test(train_a2c, A2CActorNetwork, A2CCriticNetwork):
     )
 
     # Check output
-    assert isinstance(episode_rewards, list), "Should return list"
-    assert len(episode_rewards) == n_episodes, f"Should have {n_episodes} rewards"
+    assert isinstance(episode_rewards, list), "Debe return list"
+    assert len(episode_rewards) == n_episodes, f"Debe have {n_episodes} rewards"
 
     for i, reward in enumerate(episode_rewards):
         assert isinstance(reward, (int, float, np.integer, np.floating)), \
-            f"Episode {i}: reward should be number"
-        assert reward > 0, f"Episode {i}: reward should be positive"
+            f"❌ Episode {i}: reward debe ser number"
+        assert reward > 0, f"❌ Episode {i}: reward debe ser positive"
 
     print(f"  ✓ Training completed {n_episodes} episodes")
     print(f"  ✓ Rewards: min={min(episode_rewards):.1f}, max={max(episode_rewards):.1f}, avg={np.mean(episode_rewards):.1f}")
@@ -260,10 +260,10 @@ def train_a2c_test(train_a2c, A2CActorNetwork, A2CCriticNetwork):
     critic_changed = any(not torch.allclose(p1, p2)
                         for p1, p2 in zip(initial_critic_params, critic.parameters()))
 
-    assert actor_changed, "Actor parameters should change"
-    assert critic_changed, "Critic parameters should change"
+    assert actor_changed, "Actor parameters debe change"
+    assert critic_changed, "Critic parameters debe change"
 
     print(f"  ✓ Networks are being updated")
 
     env.close()
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")

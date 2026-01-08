@@ -11,19 +11,19 @@ from collections import namedtuple
 
 
 def qnetwork_test(QNetwork):
-    """Test QNetwork class"""
+    """Test para para QNetwork class"""
     print("Testing QNetwork...")
 
     state_dim, action_dim = 4, 2
     q_net = QNetwork(state_dim, action_dim, hidden_dim=64)
 
     # Check network structure
-    assert hasattr(q_net, 'fc1'), "Network should have fc1 layer"
-    assert hasattr(q_net, 'fc2'), "Network should have fc2 layer"
-    assert hasattr(q_net, 'fc3'), "Network should have fc3 layer"
-    assert isinstance(q_net.fc1, nn.Linear), "fc1 should be Linear"
-    assert isinstance(q_net.fc2, nn.Linear), "fc2 should be Linear"
-    assert isinstance(q_net.fc3, nn.Linear), "fc3 should be Linear"
+    assert hasattr(q_net, 'fc1'), "Network debe have fc1 layer"
+    assert hasattr(q_net, 'fc2'), "Network debe have fc2 layer"
+    assert hasattr(q_net, 'fc3'), "Network debe have fc3 layer"
+    assert isinstance(q_net.fc1, nn.Linear), "❌ fc1 debe ser Linear"
+    assert isinstance(q_net.fc2, nn.Linear), "❌ fc2 debe ser Linear"
+    assert isinstance(q_net.fc3, nn.Linear), "❌ fc3 debe ser Linear"
 
     # Check dimensions
     assert q_net.fc1.in_features == state_dim
@@ -42,7 +42,7 @@ def qnetwork_test(QNetwork):
     state = torch.randn(1, state_dim)
     q_values = q_net(state)
 
-    assert q_values.shape == (1, action_dim), f"Expected shape (1, {action_dim}), got {q_values.shape}"
+    assert q_values.shape == (1, action_dim), f"❌ Esperado: shape (1, {action_dim}), Obtenido: {q_values.shape}"
     assert not torch.isnan(q_values).any(), "Q-values contain NaN"
 
     print(f"  ✓ Forward pass correct")
@@ -54,17 +54,17 @@ def qnetwork_test(QNetwork):
     batch_q = q_net(batch_state)
     assert batch_q.shape == (32, action_dim)
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def replay_buffer_test(ReplayBuffer):
-    """Test ReplayBuffer class"""
+    """Test para para ReplayBuffer class"""
     print("Testing ReplayBuffer...")
 
     buffer = ReplayBuffer(capacity=100)
 
     # Test initial state
-    assert len(buffer) == 0, "Buffer should start empty"
+    assert len(buffer) == 0, "Buffer debe start empty"
 
     # Test push
     for i in range(50):
@@ -76,18 +76,18 @@ def replay_buffer_test(ReplayBuffer):
             done=False
         )
 
-    assert len(buffer) == 50, f"Buffer should have 50 items, got {len(buffer)}"
+    assert len(buffer) == 50, f"Buffer debe have 50 items, obtenido {len(buffer)}"
 
     print(f"  ✓ Push works correctly ({len(buffer)} items)")
 
     # Test sample
     batch = buffer.sample(batch_size=10)
-    assert len(batch) == 10, f"Batch should have 10 items, got {len(batch)}"
-    assert hasattr(batch[0], 'state'), "Transition should have state"
-    assert hasattr(batch[0], 'action'), "Transition should have action"
-    assert hasattr(batch[0], 'reward'), "Transition should have reward"
-    assert hasattr(batch[0], 'next_state'), "Transition should have next_state"
-    assert hasattr(batch[0], 'done'), "Transition should have done"
+    assert len(batch) == 10, f"Batch debe have 10 items, obtenido {len(batch)}"
+    assert hasattr(batch[0], 'state'), "Transition debe have state"
+    assert hasattr(batch[0], 'action'), "Transition debe have action"
+    assert hasattr(batch[0], 'reward'), "Transition debe have reward"
+    assert hasattr(batch[0], 'next_state'), "Transition debe have next_state"
+    assert hasattr(batch[0], 'done'), "Transition debe have done"
 
     print(f"  ✓ Sample works correctly")
     print(f"    Sample transition: state={batch[0].state}, action={batch[0].action}, reward={batch[0].reward}")
@@ -102,14 +102,14 @@ def replay_buffer_test(ReplayBuffer):
             done=False
         )
 
-    assert len(buffer) == 100, f"Buffer should be capped at 100, got {len(buffer)}"
+    assert len(buffer) == 100, f"❌ Buffer debe ser capped at 100, obtenido {len(buffer)}"
     print(f"  ✓ Capacity limit works ({len(buffer)} items)")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def compute_double_dqn_loss_test(compute_double_dqn_loss, QNetwork, ReplayBuffer):
-    """Test compute_double_dqn_loss function"""
+    """Test para para compute_double_dqn_loss function"""
     print("Testing compute_double_dqn_loss...")
 
     state_dim, action_dim = 4, 2
@@ -136,10 +136,10 @@ def compute_double_dqn_loss_test(compute_double_dqn_loss, QNetwork, ReplayBuffer
     loss = compute_double_dqn_loss(batch, online_net, target_net, gamma=0.99)
 
     # Check loss properties
-    assert isinstance(loss, torch.Tensor), "Loss should be torch.Tensor"
-    assert loss.dim() == 0 or loss.shape == torch.Size([]), "Loss should be scalar"
-    assert loss.requires_grad, "Loss should require grad"
-    assert loss.item() >= 0, f"Loss should be non-negative, got {loss.item()}"
+    assert isinstance(loss, torch.Tensor), "❌ Loss debe ser torch.Tensor"
+    assert loss.dim() == 0 or loss.shape == torch.Size([]), "❌ Loss debe ser scalar"
+    assert loss.requires_grad, "Loss debe require grad"
+    assert loss.item() >= 0, f"❌ Loss debe ser non-negative, obtenido {loss.item()}"
 
     print(f"  ✓ Loss computation correct")
     print(f"    Loss value: {loss.item():.6f}")
@@ -157,7 +157,7 @@ def compute_double_dqn_loss_test(compute_double_dqn_loss, QNetwork, ReplayBuffer
     ]
 
     loss_terminal = compute_double_dqn_loss(terminal_batch, online_net, target_net, gamma=0.99)
-    assert loss_terminal.item() >= 0, "Loss with terminal states should be non-negative"
+    assert loss_terminal.item() >= 0, "❌ Loss with terminal states debe ser non-negative"
 
     print(f"  ✓ Terminal state handling correct")
     print(f"    Loss value (terminal): {loss_terminal.item():.6f}")
@@ -165,15 +165,15 @@ def compute_double_dqn_loss_test(compute_double_dqn_loss, QNetwork, ReplayBuffer
     # Test gradient flow
     loss.backward()
     has_grad = any(p.grad is not None and p.grad.abs().sum() > 0 for p in online_net.parameters())
-    assert has_grad, "At least some online_net parameters should have gradients"
+    assert has_grad, "At least some online_net parameters debe have gradients"
 
     print(f"  ✓ Gradients flow correctly")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def update_target_network_test(update_target_network, QNetwork):
-    """Test update_target_network function"""
+    """Test para para update_target_network function"""
     print("Testing update_target_network...")
 
     state_dim, action_dim = 4, 2
@@ -194,7 +194,7 @@ def update_target_network_test(update_target_network, QNetwork):
             params_different = True
             break
 
-    assert params_different, "Networks should start with different parameters"
+    assert params_different, "Networks debe start with different parameters"
     print(f"  ✓ Networks start with different parameters")
 
     # Update target network
@@ -203,7 +203,7 @@ def update_target_network_test(update_target_network, QNetwork):
     # Check they are now the same
     for p_online, p_target in zip(online_net.parameters(), target_net.parameters()):
         assert torch.allclose(p_online, p_target), \
-            "Target network parameters should match online network after update"
+            "Target network parameters debe match online network after update"
 
     print(f"  ✓ Target network updated correctly")
 
@@ -218,14 +218,14 @@ def update_target_network_test(update_target_network, QNetwork):
             params_different_after = True
             break
 
-    assert params_different_after, "Networks should be different after modifying online"
+    assert params_different_after, "❌ Networks debe ser different after modifying online"
     print(f"  ✓ Networks are independent after update")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def train_double_dqn_test(train_double_dqn):
-    """Test train_double_dqn function"""
+    """Test para para train_double_dqn function"""
     print("Testing train_double_dqn...")
 
     env = gym.make('CartPole-v1')
@@ -242,15 +242,15 @@ def train_double_dqn_test(train_double_dqn):
     )
 
     # Check outputs
-    assert isinstance(episode_rewards, list), "Should return list of rewards"
-    assert len(episode_rewards) == n_episodes, f"Should have {n_episodes} rewards, got {len(episode_rewards)}"
-    assert isinstance(trained_net, nn.Module), "Should return trained network"
+    assert isinstance(episode_rewards, list), "Debe return list of rewards"
+    assert len(episode_rewards) == n_episodes, f"Debe have {n_episodes} rewards, obtenido {len(episode_rewards)}"
+    assert isinstance(trained_net, nn.Module), "Debe return trained network"
 
     # Check rewards are valid
     for i, reward in enumerate(episode_rewards):
         assert isinstance(reward, (int, float, np.integer, np.floating)), \
-            f"Episode {i}: reward should be number"
-        assert reward > 0, f"Episode {i}: reward should be positive"
+            f"❌ Episode {i}: reward debe ser number"
+        assert reward > 0, f"❌ Episode {i}: reward debe ser positive"
 
     print(f"  ✓ Training completed {n_episodes} episodes")
     print(f"  ✓ Rewards: min={min(episode_rewards):.1f}, max={max(episode_rewards):.1f}, avg={np.mean(episode_rewards):.1f}")
@@ -271,7 +271,7 @@ def train_double_dqn_test(train_double_dqn):
         for p1, p2 in zip(initial_params, trained_net2.parameters())
     )
 
-    assert params_changed, "Network parameters should change during training"
+    assert params_changed, "Network parameters debe change during training"
     print(f"  ✓ Network is being updated")
 
     # Test network can make predictions
@@ -279,9 +279,9 @@ def train_double_dqn_test(train_double_dqn):
     with torch.no_grad():
         q_values = trained_net(state.unsqueeze(0))
 
-    assert q_values.shape[1] == env.action_space.n, "Network should output correct number of Q-values"
+    assert q_values.shape[1] == env.action_space.n, "Network debe output correct number of Q-values"
     print(f"  ✓ Trained network makes valid predictions")
     print(f"    Sample Q-values: {q_values.numpy()[0]}")
 
     env.close()
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")

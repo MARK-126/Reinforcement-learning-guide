@@ -11,18 +11,18 @@ from collections import namedtuple
 
 
 def dueling_qnetwork_test(DuelingQNetwork):
-    """Test DuelingQNetwork class"""
+    """Test para para DuelingQNetwork class"""
     print("Testing DuelingQNetwork...")
 
     state_dim, action_dim = 4, 2
     net = DuelingQNetwork(state_dim, action_dim, hidden_dim=64)
 
-    # Check structure - should have all necessary layers
-    assert hasattr(net, 'fc1'), "Should have shared fc1 layer"
-    assert hasattr(net, 'value_fc'), "Should have value_fc layer"
-    assert hasattr(net, 'value_out'), "Should have value_out layer"
-    assert hasattr(net, 'advantage_fc'), "Should have advantage_fc layer"
-    assert hasattr(net, 'advantage_out'), "Should have advantage_out layer"
+    # Check structure - debe have all necessary layers
+    assert hasattr(net, 'fc1'), "Debe have shared fc1 layer"
+    assert hasattr(net, 'value_fc'), "Debe have value_fc layer"
+    assert hasattr(net, 'value_out'), "Debe have value_out layer"
+    assert hasattr(net, 'advantage_fc'), "Debe have advantage_fc layer"
+    assert hasattr(net, 'advantage_out'), "Debe have advantage_out layer"
 
     print(f"  ✓ Network has all required layers")
 
@@ -38,7 +38,7 @@ def dueling_qnetwork_test(DuelingQNetwork):
     assert net.advantage_out.in_features == 32
     assert net.advantage_out.out_features == action_dim
 
-    print(f"  ✓ All layer dimensions correct")
+    print(f"  ✓ Todas layer dimensions correct")
     print(f"    Shared: {state_dim} → 64")
     print(f"    Value stream: 64 → 32 → 1")
     print(f"    Advantage stream: 64 → 32 → {action_dim}")
@@ -48,14 +48,14 @@ def dueling_qnetwork_test(DuelingQNetwork):
     q_values = net(state)
 
     # Check output shape
-    assert q_values.shape == (1, action_dim), f"Expected shape (1, {action_dim}), got {q_values.shape}"
+    assert q_values.shape == (1, action_dim), f"❌ Esperado: shape (1, {action_dim}), Obtenido: {q_values.shape}"
     assert not torch.isnan(q_values).any(), "Q-values contain NaN"
 
     print(f"  ✓ Forward pass correct")
     print(f"    Output shape: {q_values.shape}")
     print(f"    Sample Q-values: {q_values.detach().numpy()[0]}")
 
-    # Test dueling property: Q should decompose into V + A
+    # Test dueling property: Q debe decompose into V + A
     # Get intermediate values
     with torch.no_grad():
         x = F.relu(net.fc1(state))
@@ -70,7 +70,7 @@ def dueling_qnetwork_test(DuelingQNetwork):
         expected_q = value + (advantages - advantages.mean(dim=1, keepdim=True))
 
         assert torch.allclose(q_values, expected_q, atol=1e-5), \
-            "Q-values should equal V + (A - mean(A))"
+            "Q-values debe equal V + (A - mean(A))"
 
     print(f"  ✓ Dueling decomposition correct: Q = V + (A - mean(A))")
     print(f"    V(s): {value.item():.4f}")
@@ -84,17 +84,17 @@ def dueling_qnetwork_test(DuelingQNetwork):
 
     print(f"  ✓ Batch processing works")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def dueling_replay_buffer_test(DuelingReplayBuffer):
-    """Test DuelingReplayBuffer class"""
+    """Test para para DuelingReplayBuffer class"""
     print("Testing DuelingReplayBuffer...")
 
     buffer = DuelingReplayBuffer(capacity=100)
 
     # Test initial state
-    assert len(buffer) == 0, "Buffer should start empty"
+    assert len(buffer) == 0, "Buffer debe start empty"
 
     # Test push
     for i in range(50):
@@ -106,16 +106,16 @@ def dueling_replay_buffer_test(DuelingReplayBuffer):
             done=False
         )
 
-    assert len(buffer) == 50, f"Buffer should have 50 items, got {len(buffer)}"
+    assert len(buffer) == 50, f"Buffer debe have 50 items, obtenido {len(buffer)}"
 
     print(f"  ✓ Push works ({len(buffer)} items)")
 
     # Test sample
     batch = buffer.sample(batch_size=10)
-    assert len(batch) == 10, f"Batch should have 10 items, got {len(batch)}"
-    assert hasattr(batch[0], 'state'), "Transition should have state"
-    assert hasattr(batch[0], 'action'), "Transition should have action"
-    assert hasattr(batch[0], 'reward'), "Transition should have reward"
+    assert len(batch) == 10, f"Batch debe have 10 items, obtenido {len(batch)}"
+    assert hasattr(batch[0], 'state'), "Transition debe have state"
+    assert hasattr(batch[0], 'action'), "Transition debe have action"
+    assert hasattr(batch[0], 'reward'), "Transition debe have reward"
 
     print(f"  ✓ Sample works")
 
@@ -123,15 +123,15 @@ def dueling_replay_buffer_test(DuelingReplayBuffer):
     for i in range(100):
         buffer.push(np.array([0,0,0,0]), 0, 0.0, np.array([0,0,0,0]), False)
 
-    assert len(buffer) == 100, f"Buffer should cap at 100, got {len(buffer)}"
+    assert len(buffer) == 100, f"Buffer debe cap at 100, obtenido {len(buffer)}"
 
     print(f"  ✓ Capacity limit works")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def compute_dueling_dqn_loss_test(compute_dueling_dqn_loss, DuelingQNetwork, DuelingReplayBuffer):
-    """Test compute_dueling_dqn_loss function"""
+    """Test para para compute_dueling_dqn_loss function"""
     print("Testing compute_dueling_dqn_loss...")
 
     state_dim, action_dim = 4, 2
@@ -158,10 +158,10 @@ def compute_dueling_dqn_loss_test(compute_dueling_dqn_loss, DuelingQNetwork, Due
     loss = compute_dueling_dqn_loss(batch, online_net, target_net, gamma=0.99)
 
     # Check loss properties
-    assert isinstance(loss, torch.Tensor), "Loss should be torch.Tensor"
-    assert loss.dim() == 0 or loss.shape == torch.Size([]), "Loss should be scalar"
-    assert loss.requires_grad, "Loss should require grad"
-    assert loss.item() >= 0, f"Loss should be non-negative, got {loss.item()}"
+    assert isinstance(loss, torch.Tensor), "❌ Loss debe ser torch.Tensor"
+    assert loss.dim() == 0 or loss.shape == torch.Size([]), "❌ Loss debe ser scalar"
+    assert loss.requires_grad, "Loss debe require grad"
+    assert loss.item() >= 0, f"❌ Loss debe ser non-negative, obtenido {loss.item()}"
 
     print(f"  ✓ Loss computation correct")
     print(f"    Loss value: {loss.item():.6f}")
@@ -187,19 +187,19 @@ def compute_dueling_dqn_loss_test(compute_dueling_dqn_loss, DuelingQNetwork, Due
     loss.backward()
     has_grad = any(p.grad is not None and p.grad.abs().sum() > 0
                    for p in online_net.parameters())
-    assert has_grad, "Should have gradients"
+    assert has_grad, "Debe have gradients"
 
     # Check that value and advantage streams both get gradients
-    assert online_net.value_out.weight.grad is not None, "Value stream should have gradients"
-    assert online_net.advantage_out.weight.grad is not None, "Advantage stream should have gradients"
+    assert online_net.value_out.weight.grad is not None, "Value stream debe have gradients"
+    assert online_net.advantage_out.weight.grad is not None, "Advantage stream debe have gradients"
 
     print(f"  ✓ Gradients flow to both value and advantage streams")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def update_dueling_target_test(update_dueling_target, DuelingQNetwork):
-    """Test update_dueling_target function"""
+    """Test para para update_dueling_target function"""
     print("Testing update_dueling_target...")
 
     state_dim, action_dim = 4, 2
@@ -220,7 +220,7 @@ def update_dueling_target_test(update_dueling_target, DuelingQNetwork):
             params_different = True
             break
 
-    assert params_different, "Networks should start different"
+    assert params_different, "Networks debe start different"
     print(f"  ✓ Networks start with different parameters")
 
     # Update target
@@ -229,7 +229,7 @@ def update_dueling_target_test(update_dueling_target, DuelingQNetwork):
     # Check they're now the same
     for p_online, p_target in zip(online_net.parameters(), target_net.parameters()):
         assert torch.allclose(p_online, p_target), \
-            "Target should match online after update"
+            "Target debe match online after update"
 
     print(f"  ✓ Target network updated correctly")
 
@@ -239,11 +239,11 @@ def update_dueling_target_test(update_dueling_target, DuelingQNetwork):
 
     print(f"  ✓ Both value and advantage streams updated")
 
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
 
 
 def train_dueling_dqn_test(train_dueling_dqn):
-    """Test train_dueling_dqn function"""
+    """Test para para train_dueling_dqn function"""
     print("Testing train_dueling_dqn...")
 
     env = gym.make('CartPole-v1')
@@ -260,19 +260,19 @@ def train_dueling_dqn_test(train_dueling_dqn):
     )
 
     # Check outputs
-    assert isinstance(episode_rewards, list), "Should return list"
-    assert len(episode_rewards) == n_episodes, f"Should have {n_episodes} rewards"
-    assert isinstance(trained_net, nn.Module), "Should return network"
+    assert isinstance(episode_rewards, list), "Debe return list"
+    assert len(episode_rewards) == n_episodes, f"Debe have {n_episodes} rewards"
+    assert isinstance(trained_net, nn.Module), "Debe return network"
 
     # Check it's a DuelingQNetwork
-    assert hasattr(trained_net, 'value_fc'), "Should be DuelingQNetwork"
-    assert hasattr(trained_net, 'advantage_fc'), "Should be DuelingQNetwork"
+    assert hasattr(trained_net, 'value_fc'), "❌ Debe ser DuelingQNetwork"
+    assert hasattr(trained_net, 'advantage_fc'), "❌ Debe ser DuelingQNetwork"
 
     # Check rewards
     for i, reward in enumerate(episode_rewards):
         assert isinstance(reward, (int, float, np.integer, np.floating)), \
-            f"Episode {i}: reward should be number"
-        assert reward > 0, f"Episode {i}: reward should be positive"
+            f"❌ Episode {i}: reward debe ser number"
+        assert reward > 0, f"❌ Episode {i}: reward debe ser positive"
 
     print(f"  ✓ Training completed {n_episodes} episodes")
     print(f"  ✓ Rewards: min={min(episode_rewards):.1f}, max={max(episode_rewards):.1f}, avg={np.mean(episode_rewards):.1f}")
@@ -292,7 +292,7 @@ def train_dueling_dqn_test(train_dueling_dqn):
         for p1, p2 in zip(initial_params, trained_net2.parameters())
     )
 
-    assert params_changed, "Network parameters should change"
+    assert params_changed, "Network parameters debe change"
     print(f"  ✓ Network is being updated")
 
     # Test network makes predictions
@@ -305,4 +305,4 @@ def train_dueling_dqn_test(train_dueling_dqn):
     print(f"    Sample Q-values: {q_values.numpy()[0]}")
 
     env.close()
-    print("\n✅ All tests passed!")
+    print("\n✅ Todas tests passed!")
