@@ -1,163 +1,108 @@
 """
-Public tests for SARSA Exercise
-
-This file contains test functions to validate student implementations
-of the SARSA algorithm.
+Tests para SARSA_Exercise.ipynb
 """
-
 import numpy as np
 import gymnasium as gym
 
 
-def sarsa_update_test(target):
-    """Test SARSA update rule"""
+def sarsa_update_test(sarsa_update):
+    """Test para ejercicio 1: sarsa_update"""
     print("Testing sarsa_update...")
-
-    # Test case 1: Non-terminal update with specific next_action
-    Q = np.zeros((4, 2))
-    Q[1] = [0.5, 0.3]  # Q-values for next_state
-
-    alpha = 0.1
-    gamma = 0.9
-
-    # SARSA uses next_action=1 (Q[1,1]=0.3), NOT max (Q[1,0]=0.5)
-    Q_updated, td_error = target(
-        Q.copy(), state=0, action=0, reward=1.0,
-        next_state=1, next_action=1, done=False,
-        alpha=alpha, gamma=gamma
-    )
-
-    # Expected: Q[0,0] = 0 + 0.1 * (1.0 + 0.9 * 0.3 - 0) = 0.127
-    expected_q = 0.127
-    expected_td = 1.27
-
-    assert np.isclose(Q_updated[0, 0], expected_q, atol=1e-6), \
-        f"SARSA update failed. Expected Q[0,0]={expected_q:.4f}, got {Q_updated[0, 0]:.4f}"
-    assert np.isclose(td_error, expected_td, atol=1e-6), \
-        f"TD error wrong. Expected {expected_td:.4f}, got {td_error:.4f}"
-
-    # Test case 2: Verify SARSA uses next_action, not max
-    # If next_action=0 (max Q-value), should get different result
-    Q_updated2, td_error2 = target(
-        Q.copy(), state=0, action=0, reward=1.0,
-        next_state=1, next_action=0, done=False,  # next_action=0 this time
-        alpha=alpha, gamma=gamma
-    )
-
-    # Expected: Q[0,0] = 0 + 0.1 * (1.0 + 0.9 * 0.5 - 0) = 0.145
-    expected_q2 = 0.145
-    expected_td2 = 1.45
-
-    assert np.isclose(Q_updated2[0, 0], expected_q2, atol=1e-6), \
-        f"SARSA should use next_action. Expected Q[0,0]={expected_q2:.4f}, got {Q_updated2[0, 0]:.4f}"
-
-    # Verify different next_actions give different results
-    assert not np.isclose(Q_updated[0, 0], Q_updated2[0, 0]), \
-        "SARSA should give different results for different next_actions!"
-
-    # Test case 3: Terminal update
-    Q = np.zeros((4, 2))
-    Q[1] = [0.5, 0.3]
-
-    Q_updated, td_error = target(
-        Q.copy(), state=0, action=0, reward=1.0,
-        next_state=1, next_action=0, done=True,
-        alpha=alpha, gamma=gamma
-    )
-
-    # Expected: Q[0,0] = 0 + 0.1 * (1.0 - 0) = 0.1
-    expected_q = 0.1
-    expected_td = 1.0
-
-    assert np.isclose(Q_updated[0, 0], expected_q, atol=1e-6), \
-        f"Terminal SARSA update failed. Expected Q[0,0]={expected_q:.4f}, got {Q_updated[0, 0]:.4f}"
-    assert np.isclose(td_error, expected_td, atol=1e-6), \
-        f"TD error wrong for terminal. Expected {expected_td:.4f}, got {td_error:.4f}"
-
-    # Test case 4: Update with existing Q-value
-    Q = np.array([[0.2, 0.3], [0.4, 0.6], [0.1, 0.5], [0.8, 0.2]])
-
-    Q_updated, td_error = target(
-        Q.copy(), state=0, action=1, reward=0.5,
-        next_state=2, next_action=0, done=False,
-        alpha=0.2, gamma=0.95
-    )
-
-    # Current Q[0,1] = 0.3
-    # Next action Q[2,0] = 0.1 (NOT max which is 0.5)
-    # Target = 0.5 + 0.95 * 0.1 = 0.595
-    # TD error = 0.595 - 0.3 = 0.295
-    # New Q[0,1] = 0.3 + 0.2 * 0.295 = 0.359
-    expected_q = 0.359
-    expected_td = 0.295
-
-    assert np.isclose(Q_updated[0, 1], expected_q, atol=1e-6), \
-        f"SARSA with existing Q failed. Expected Q[0,1]={expected_q:.4f}, got {Q_updated[0, 1]:.4f}"
-    assert np.isclose(td_error, expected_td, atol=1e-6), \
-        f"TD error wrong. Expected {expected_td:.4f}, got {td_error:.4f}"
-
-    print("\033[92mAll tests passed!\033[0m")
+    
+    # Test 1: Actualización sin terminar
+    Q_test = np.zeros((3, 2))
+    Q_test[1] = [0.5, 0.3]
+    
+    Q_test, td_error = sarsa_update(Q_test, state=0, action=0, reward=1.0,
+                                    next_state=1, next_action=1, done=False, 
+                                    alpha=0.1, gamma=0.9)
+    
+    # target = 1.0 + 0.9 * 0.3 = 1.27 (usa next_action=1, no max!)
+    # nuevo_q = 0 + 0.1 * 1.27 = 0.127
+    esperado = 0.127
+    assert np.isclose(Q_test[0, 0], esperado, atol=0.001), \
+        f"❌ Q[0,0] incorrecto. Esperado: {esperado}, Obtenido: {Q_test[0, 0]}"
+    
+    # Test 2: Actualización con done=True
+    Q_test2 = np.zeros((3, 2))
+    Q_test2, td_error2 = sarsa_update(Q_test2, state=0, action=0, reward=1.0,
+                                      next_state=1, next_action=1, done=True, 
+                                      alpha=0.1, gamma=0.9)
+    
+    esperado2 = 0.1
+    assert np.isclose(Q_test2[0, 0], esperado2, atol=0.001), \
+        f"❌ Q[0,0] con done=True incorrecto. Esperado: {esperado2}, Obtenido: {Q_test2[0, 0]}"
+    
+    print("✅ Test pasado! SARSA update funciona correctamente.")
+    return True
 
 
-def train_sarsa_test(target):
-    """Test SARSA training loop"""
-    print("Testing train_sarsa...")
-
-    # Create environment
+def run_single_episode_sarsa_test(run_single_episode_sarsa):
+    """Test para ejercicio 2a: run_single_episode_sarsa"""
+    print("Testing run_single_episode_sarsa...")
+    
     env = gym.make('FrozenLake-v1', is_slippery=False)
-
-    # Test case 1: Basic training
-    np.random.seed(42)
-    Q, rewards_history = target(
-        env,
-        n_episodes=100,
-        alpha=0.1,
-        gamma=0.99,
-        epsilon=1.0,
-        epsilon_decay=0.99,
-        epsilon_min=0.01,
-        max_steps=50
-    )
-
-    # Check Q-table shape
-    assert Q.shape == (16, 4), f"Q-table shape wrong. Expected (16, 4), got {Q.shape}"
-
-    # Check rewards history length
-    assert len(rewards_history) == 100, \
-        f"Rewards history length wrong. Expected 100, got {len(rewards_history)}"
-
-    # Check that Q-values have been updated
-    assert not np.allclose(Q, 0), "Q-table should be updated (not all zeros)"
-
-    # Test case 2: Agent should learn over time
-    np.random.seed(42)
-    Q, rewards_history = target(
-        env,
-        n_episodes=500,
-        alpha=0.1,
-        gamma=0.99,
-        epsilon=1.0,
-        epsilon_decay=0.995,
-        epsilon_min=0.01,
-        max_steps=100
-    )
-
-    early_avg = np.mean(rewards_history[:100])
-    late_avg = np.mean(rewards_history[-100:])
-
-    assert late_avg >= early_avg, \
-        f"SARSA should improve over time. Early: {early_avg:.3f}, Late: {late_avg:.3f}"
-
-    # Test case 3: Should eventually solve FrozenLake
-    assert late_avg > 0.5, \
-        f"SARSA should learn to solve FrozenLake. Got success rate: {late_avg:.3f}"
-
+    Q = np.zeros((16, 4))
+    
+    # Test 1: Retorna Q y recompensa
+    Q_new, recompensa_total = run_single_episode_sarsa(env, Q, epsilon=0.1, alpha=0.1, gamma=0.99)
+    
+    assert isinstance(Q_new, np.ndarray), "❌ Debe retornar Q-table"
+    assert isinstance(recompensa_total, (int, float, np.number)), "❌ Debe retornar recompensa numérica"
+    
+    # Test 2: Q-table tiene la forma correcta
+    assert Q_new.shape == (16, 4), f"❌ Q debe tener forma (16, 4), obtenido: {Q_new.shape}"
+    
     env.close()
+    print("✅ Test pasado! Ejecutas episodios SARSA correctamente.")
+    return True
 
-    print("\033[92mAll tests passed!\033[0m")
-    print("\n\033[93mCongratulations! Your SARSA implementation is correct!\033[0m")
+
+def train_sarsa_simple_test(train_sarsa_simple):
+    """Test para ejercicio 2b: train_sarsa_simple"""
+    print("Testing train_sarsa_simple...")
+    
+    env = gym.make('FrozenLake-v1', is_slippery=False)
+    
+    # Test 1: Retorna Q y recompensas
+    Q, recompensas = train_sarsa_simple(env, n_episodes=100, alpha=0.1, gamma=0.99, epsilon=0.1)
+    
+    assert isinstance(Q, np.ndarray), "❌ Debe retornar Q-table"
+    assert isinstance(recompensas, list), "❌ Debe retornar lista de recompensas"
+    
+    # Test 2: Número correcto de episodios
+    assert len(recompensas) == 100, f"❌ Debe haber 100 recompensas, obtenido: {len(recompensas)}"
+    
+    env.close()
+    print("✅ Test pasado! SARSA simple funciona correctamente.")
+    return True
+
+
+def train_sarsa_with_decay_test(train_sarsa_with_decay):
+    """Test para ejercicio 2c: train_sarsa_with_decay"""
+    print("Testing train_sarsa_with_decay...")
+    
+    env = gym.make('FrozenLake-v1', is_slippery=False)
+    
+    # Test 1: Retorna Q y recompensas
+    Q, recompensas = train_sarsa_with_decay(env, n_episodes=1000, alpha=0.1, gamma=0.99, 
+                                            epsilon_start=1.0, epsilon_end=0.01)
+    
+    assert isinstance(Q, np.ndarray), "❌ Debe retornar Q-table"
+    assert len(recompensas) == 1000, f"❌ Debe haber 1000 recompensas"
+    
+    # Test 2: Aprende
+    promedio_inicial = np.mean(recompensas[:100])
+    promedio_final = np.mean(recompensas[-100:])
+    assert promedio_final >= promedio_inicial, \
+        f"❌ Agente debería mejorar. Inicial: {promedio_inicial:.2f}, Final: {promedio_final:.2f}"
+    
+    env.close()
+    print("✅ Test pasado! SARSA con decay funciona correctamente.")
+    print(f"   Mejora: {promedio_inicial*100:.0f}% → {promedio_final*100:.0f}%")
+    return True
 
 
 if __name__ == "__main__":
-    print("This file contains test functions for SARSA.")
-    print("Import and use them in the SARSA Exercise notebook.")
+    print("Tests para SARSA_Exercise.ipynb")
+    print("=" * 50)

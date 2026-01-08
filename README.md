@@ -460,3 +460,213 @@ Este proyecto está bajo la licencia MIT. Ver el archivo `LICENSE` para más det
 ⭐ Si este repositorio te resulta útil, considera darle una estrella!
 
 **¡Feliz aprendizaje de Reinforcement Learning!** 🚀🤖
+```
+Reinforcement-learning-guide
+├─ 00_prerequisites
+│  ├─ README.md
+│  ├─ numpy_for_rl.ipynb
+│  ├─ numpy_for_rl_solution.ipynb
+│  ├─ numpy_for_rl_tests.py
+│  ├─ pytorch_for_rl.ipynb
+│  └─ pytorch_for_rl_tests.py
+├─ 01_fundamentos
+│  ├─ bellman.md
+│  ├─ introduccion.md
+│  ├─ mdp.md
+│  └─ value_policy.md
+├─ 01_introduccion_practica
+│  ├─ README.md
+│  ├─ gym_basics.ipynb
+│  ├─ gym_basics_solution.ipynb
+│  ├─ gym_basics_tests.py
+│  ├─ simple_q_learning.ipynb
+│  ├─ simple_q_learning_solution.ipynb
+│  └─ simple_q_learning_tests.py
+├─ 02_algoritmos_clasicos
+│  ├─ dynamic_programming
+│  │  ├─ Policy_Iteration_Exercise.ipynb
+│  │  ├─ Value_Iteration_Exercise.ipynb
+│  │  ├─ policy_iteration_tests.py
+│  │  └─ value_iteration_tests.py
+│  ├─ monte_carlo
+│  │  ├─ Monte_Carlo_Control_Exercise.ipynb
+│  │  └─ monte_carlo_tests.py
+│  └─ temporal_difference
+│     ├─ Q_Learning_Exercise.ipynb
+│     ├─ Q_Learning_Exercise_ORIGINAL.ipynb
+│     ├─ Q_Learning_Solution.ipynb
+│     ├─ SARSA_Exercise.ipynb
+│     ├─ SARSA_Exercise_ORIGINAL.ipynb
+│     ├─ SARSA_Solution.ipynb
+│     ├─ q_learning.py
+│     ├─ q_learning_tests.py
+│     ├─ sarsa.py
+│     └─ sarsa_tests.py
+├─ 03_deep_rl
+│  ├─ dqn
+│  │  ├─ DQN_Exercise.ipynb
+│  │  ├─ Double_DQN_Exercise.ipynb
+│  │  ├─ Dueling_DQN_Exercise.ipynb
+│  │  ├─ double_dqn_tests.py
+│  │  ├─ dqn_basic.py
+│  │  ├─ dqn_tests.py
+│  │  └─ dueling_dqn_tests.py
+│  └─ policy_gradient
+│     ├─ A2C_Exercise.ipynb
+│     ├─ Actor_Critic_Exercise.ipynb
+│     ├─ PPO_Exercise.ipynb
+│     ├─ REINFORCE_Exercise.ipynb
+│     ├─ a2c_tests.py
+│     ├─ actor_critic_tests.py
+│     ├─ ppo_tests.py
+│     └─ reinforce_tests.py
+├─ 04_ejemplos
+│  └─ cartpole
+│     ├─ README.md
+│     └─ cartpole_qlearning.py
+├─ 05_recursos
+│  ├─ cursos.md
+│  ├─ libros.md
+│  └─ papers.md
+├─ CONTRIBUTING.md
+├─ LICENSE
+├─ QUICKSTART.md
+├─ README.md
+├─ W2A1
+│  ├─ Optimization_methods.ipynb
+│  ├─ datasets
+│  │  └─ data.mat
+│  ├─ images
+│  │  ├─ Momentum.png
+│  │  ├─ cost.jpg
+│  │  ├─ kiank_minibatch.png
+│  │  ├─ kiank_partition.png
+│  │  ├─ kiank_sgd.png
+│  │  ├─ kiank_shuffle.png
+│  │  ├─ lr.png
+│  │  ├─ opt1.gif
+│  │  ├─ opt2.gif
+│  │  └─ opt_momentum.png
+│  ├─ opt_utils_v1a.py
+│  ├─ public_tests.py
+│  └─ testCases.py
+├─ complete_qlearning_solutions.py
+├─ complete_sarsa_solutions.py
+├─ complete_solutions.py
+├─ copy_outputs.py
+├─ process_all_notebooks.py
+├─ q_learning_results.png
+├─ refactor_qlearning.py
+├─ refactor_sarsa.py
+├─ requirements.txt
+├─ test_qlearning.py
+└─ utils
+   ├─ plotting.py
+   └─ replay_buffer.py
+
+```
+```
+Reinforcement-learning-guide
+├─ 00_prerequisites
+│  ├─ README.md
+│  ├─ numpy_for_rl.ipynb
+│  ├─ numpy_for_rl_solution.ipynb
+│  ├─ numpy_for_rl_tests.py
+│  ├─ pytorch_for_rl.ipynb
+│  └─ pytorch_for_rl_tests.py
+├─ 01_fundamentos
+│  ├─ bellman.md
+│  ├─ introduccion.md
+│  ├─ mdp.md
+│  └─ value_policy.md
+├─ 01_introduccion_practica
+│  ├─ README.md
+│  ├─ gym_basics.ipynb
+│  ├─ gym_basics_solution.ipynb
+│  ├─ gym_basics_tests.py
+│  ├─ simple_q_learning.ipynb
+│  ├─ simple_q_learning_solution.ipynb
+│  └─ simple_q_learning_tests.py
+├─ 02_algoritmos_clasicos
+│  ├─ dynamic_programming
+│  │  ├─ Policy_Iteration_Exercise.ipynb
+│  │  ├─ Value_Iteration_Exercise.ipynb
+│  │  ├─ policy_iteration_tests.py
+│  │  └─ value_iteration_tests.py
+│  ├─ monte_carlo
+│  │  ├─ Monte_Carlo_Control_Exercise.ipynb
+│  │  └─ monte_carlo_tests.py
+│  └─ temporal_difference
+│     ├─ Q_Learning_Exercise.ipynb
+│     ├─ Q_Learning_Exercise_ORIGINAL.ipynb
+│     ├─ Q_Learning_Solution.ipynb
+│     ├─ SARSA_Exercise.ipynb
+│     ├─ SARSA_Exercise_ORIGINAL.ipynb
+│     ├─ SARSA_Solution.ipynb
+│     ├─ q_learning.py
+│     ├─ q_learning_tests.py
+│     ├─ sarsa.py
+│     └─ sarsa_tests.py
+├─ 03_deep_rl
+│  ├─ dqn
+│  │  ├─ DQN_Exercise.ipynb
+│  │  ├─ Double_DQN_Exercise.ipynb
+│  │  ├─ Dueling_DQN_Exercise.ipynb
+│  │  ├─ double_dqn_tests.py
+│  │  ├─ dqn_basic.py
+│  │  ├─ dqn_tests.py
+│  │  └─ dueling_dqn_tests.py
+│  └─ policy_gradient
+│     ├─ A2C_Exercise.ipynb
+│     ├─ Actor_Critic_Exercise.ipynb
+│     ├─ PPO_Exercise.ipynb
+│     ├─ REINFORCE_Exercise.ipynb
+│     ├─ a2c_tests.py
+│     ├─ actor_critic_tests.py
+│     ├─ ppo_tests.py
+│     └─ reinforce_tests.py
+├─ 04_ejemplos
+│  └─ cartpole
+│     ├─ README.md
+│     └─ cartpole_qlearning.py
+├─ 05_recursos
+│  ├─ cursos.md
+│  ├─ libros.md
+│  └─ papers.md
+├─ CONTRIBUTING.md
+├─ LICENSE
+├─ QUICKSTART.md
+├─ README.md
+├─ W2A1
+│  ├─ Optimization_methods.ipynb
+│  ├─ datasets
+│  │  └─ data.mat
+│  ├─ images
+│  │  ├─ Momentum.png
+│  │  ├─ cost.jpg
+│  │  ├─ kiank_minibatch.png
+│  │  ├─ kiank_partition.png
+│  │  ├─ kiank_sgd.png
+│  │  ├─ kiank_shuffle.png
+│  │  ├─ lr.png
+│  │  ├─ opt1.gif
+│  │  ├─ opt2.gif
+│  │  └─ opt_momentum.png
+│  ├─ opt_utils_v1a.py
+│  ├─ public_tests.py
+│  └─ testCases.py
+├─ complete_qlearning_solutions.py
+├─ complete_sarsa_solutions.py
+├─ complete_solutions.py
+├─ copy_outputs.py
+├─ process_all_notebooks.py
+├─ q_learning_results.png
+├─ refactor_qlearning.py
+├─ refactor_sarsa.py
+├─ requirements.txt
+├─ test_qlearning.py
+└─ utils
+   ├─ plotting.py
+   └─ replay_buffer.py
+
+```

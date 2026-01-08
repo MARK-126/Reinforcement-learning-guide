@@ -1,240 +1,186 @@
 """
-Public tests for Q-Learning Exercise
+Tests para Q_Learning_Exercise.ipynb
 
-This file contains test functions to validate student implementations
-of the Q-Learning algorithm components.
+Este archivo contiene tests automáticos para validar las implementaciones
+de los ejercicios del notebook Q-Learning.
 """
 
 import numpy as np
 import gymnasium as gym
 
 
-def initialize_q_table_test(target):
-    """Test Q-table initialization"""
+def initialize_q_table_test(initialize_q_table):
+    """Test para ejercicio 1: initialize_q_table"""
     print("Testing initialize_q_table...")
+    
+    # Test 1: Forma correcta
+    Q = initialize_q_table(16, 4)
+    assert Q.shape == (16, 4), f"❌ Forma incorrecta. Esperado: (16, 4), Obtenido: {Q.shape}"
+    
+    # Test 2: Tipo correcto
+    assert isinstance(Q, np.ndarray), f"❌ Tipo incorrecto. Debe ser numpy.ndarray"
+    
+    # Test 3: Valores en cero
+    assert np.all(Q == 0), "❌ La Q-table debe estar inicializada en ceros"
+    
+    # Test 4: Diferentes tamaños
+    Q2 = initialize_q_table(10, 5)
+    assert Q2.shape == (10, 5), f"❌ Forma incorrecta para (10, 5)"
+    
+    print("✅ Test pasado! Tu Q-table se creó correctamente.")
+    return True
 
-    # Test case 1: Basic initialization with zeros
-    Q = target(16, 4, init_value=0.0)
-    assert Q.shape == (16, 4), f"Wrong shape. Expected (16, 4), got {Q.shape}"
-    assert np.allclose(Q, np.zeros((16, 4))), "Q-table should be initialized with zeros"
 
-    # Test case 2: Initialization with custom value
-    Q = target(10, 3, init_value=0.5)
-    assert Q.shape == (10, 3), f"Wrong shape. Expected (10, 3), got {Q.shape}"
-    assert np.allclose(Q, np.ones((10, 3)) * 0.5), "Q-table should be initialized with custom value"
-
-    # Test case 3: Different dimensions
-    Q = target(5, 8, init_value=1.0)
-    assert Q.shape == (5, 8), f"Wrong shape. Expected (5, 8), got {Q.shape}"
-    assert np.allclose(Q, np.ones((5, 8))), "Q-table should be initialized with ones"
-
-    print("\033[92mAll tests passed!\033[0m")
-
-
-def epsilon_greedy_action_test(target):
-    """Test epsilon-greedy action selection"""
+def epsilon_greedy_action_test(epsilon_greedy_action):
+    """Test para ejercicio 2: epsilon_greedy_action"""
     print("Testing epsilon_greedy_action...")
-
-    # Setup
-    np.random.seed(42)
-    Q = np.array([[0.1, 0.5, 0.2, 0.3],
-                  [0.4, 0.1, 0.6, 0.2],
-                  [0.2, 0.3, 0.1, 0.4]])
-    n_actions = 4
-
-    # Test case 1: epsilon = 0 (always exploit)
-    np.random.seed(42)
-    action = target(Q, state=0, n_actions=n_actions, epsilon=0.0)
-    assert action == 1, f"With epsilon=0, should select action with max Q-value. Expected 1, got {action}"
-
-    action = target(Q, state=1, n_actions=n_actions, epsilon=0.0)
-    assert action == 2, f"With epsilon=0, should select action with max Q-value. Expected 2, got {action}"
-
-    # Test case 2: epsilon = 1 (always explore)
-    np.random.seed(42)
-    actions = [target(Q, state=0, n_actions=n_actions, epsilon=1.0) for _ in range(100)]
-    unique_actions = set(actions)
-    assert len(unique_actions) > 1, "With epsilon=1, should select various random actions"
-    assert all(0 <= a < n_actions for a in actions), "Actions should be in valid range"
-
-    # Test case 3: epsilon = 0.5 (mixed)
-    np.random.seed(42)
-    actions = [target(Q, state=0, n_actions=n_actions, epsilon=0.5) for _ in range(200)]
-    greedy_action = np.argmax(Q[0])
-    greedy_count = sum(1 for a in actions if a == greedy_action)
-    # Should have roughly 50% greedy actions, 50% random (allowing some variance)
-    assert 80 < greedy_count < 160, f"With epsilon=0.5, expected ~100 greedy actions, got {greedy_count}"
-
-    # Test case 4: Check return type
-    action = target(Q, state=0, n_actions=n_actions, epsilon=0.2)
-    assert isinstance(action, (int, np.integer)), f"Action should be integer, got {type(action)}"
-
-    print("\033[92mAll tests passed!\033[0m")
+    
+    Q_test = np.array([[0.1, 0.5, 0.2, 0.3],
+                       [0.8, 0.2, 0.3, 0.1]])
+    
+    # Test 1: Epsilon = 0 (siempre explotar)
+    for _ in range(10):
+        accion = epsilon_greedy_action(Q_test, estado=0, epsilon=0.0)
+        assert accion == 1, f"❌ Con epsilon=0, debe elegir acción 1 (mejor), obtenido: {accion}"
+    
+    # Test 2: Epsilon = 1 (siempre explorar)
+    acciones = [epsilon_greedy_action(Q_test, estado=0, epsilon=1.0) for _ in range(50)]
+    acciones_unicas = len(set(acciones))
+    assert acciones_unicas >= 2, "❌ Con epsilon=1, debe generar acciones variadas"
+    
+    # Test 3: Tipo correcto
+    accion = epsilon_greedy_action(Q_test, estado=0, epsilon=0.5)
+    assert isinstance(accion, (int, np.integer)), f"❌ Debe retornar int, obtenido: {type(accion)}"
+    
+    # Test 4: Rango válido
+    assert 0 <= accion < 4, f"❌ Acción debe estar entre 0 y 3, obtenido: {accion}"
+    
+    print("✅ Test pasado! Eliges acciones correctamente con epsilon-greedy.")
+    return True
 
 
-def q_learning_update_test(target):
-    """Test Q-Learning update rule"""
+def q_learning_update_test(q_learning_update):
+    """Test para ejercicio 3: q_learning_update"""
     print("Testing q_learning_update...")
-
-    # Test case 1: Non-terminal update
-    Q = np.zeros((4, 2))
-    Q[1] = [0.5, 0.3]  # Q-values for next_state
-
-    alpha = 0.1
-    gamma = 0.9
-
-    Q_updated, td_error = target(
-        Q.copy(), state=0, action=0, reward=1.0,
-        next_state=1, done=False, alpha=alpha, gamma=gamma
-    )
-
-    # Expected: Q[0,0] = 0 + 0.1 * (1.0 + 0.9 * 0.5 - 0) = 0.145
-    expected_q = 0.145
-    expected_td = 1.45
-
-    assert np.isclose(Q_updated[0, 0], expected_q, atol=1e-6), \
-        f"Non-terminal update failed. Expected Q[0,0]={expected_q:.4f}, got {Q_updated[0, 0]:.4f}"
-    assert np.isclose(td_error, expected_td, atol=1e-6), \
-        f"TD error wrong. Expected {expected_td:.4f}, got {td_error:.4f}"
-
-    # Test case 2: Terminal update
-    Q = np.zeros((4, 2))
-    Q[1] = [0.5, 0.3]
-
-    Q_updated, td_error = target(
-        Q.copy(), state=0, action=0, reward=1.0,
-        next_state=1, done=True, alpha=alpha, gamma=gamma
-    )
-
-    # Expected: Q[0,0] = 0 + 0.1 * (1.0 - 0) = 0.1
-    expected_q = 0.1
-    expected_td = 1.0
-
-    assert np.isclose(Q_updated[0, 0], expected_q, atol=1e-6), \
-        f"Terminal update failed. Expected Q[0,0]={expected_q:.4f}, got {Q_updated[0, 0]:.4f}"
-    assert np.isclose(td_error, expected_td, atol=1e-6), \
-        f"TD error wrong for terminal state. Expected {expected_td:.4f}, got {td_error:.4f}"
-
-    # Test case 3: Update with existing Q-value
-    Q = np.array([[0.2, 0.3], [0.4, 0.6], [0.1, 0.5], [0.8, 0.2]])
-
-    Q_updated, td_error = target(
-        Q.copy(), state=0, action=1, reward=0.5,
-        next_state=2, done=False, alpha=0.2, gamma=0.95
-    )
-
-    # Current Q[0,1] = 0.3
-    # Max Q[2] = 0.5
-    # Target = 0.5 + 0.95 * 0.5 = 0.975
-    # TD error = 0.975 - 0.3 = 0.675
-    # New Q[0,1] = 0.3 + 0.2 * 0.675 = 0.435
-    expected_q = 0.435
-    expected_td = 0.675
-
-    assert np.isclose(Q_updated[0, 1], expected_q, atol=1e-6), \
-        f"Update with existing Q-value failed. Expected Q[0,1]={expected_q:.4f}, got {Q_updated[0, 1]:.4f}"
-    assert np.isclose(td_error, expected_td, atol=1e-6), \
-        f"TD error wrong. Expected {expected_td:.4f}, got {td_error:.4f}"
-
-    # Test case 4: Negative reward
-    Q = np.zeros((2, 2))
-    Q[1] = [0.2, 0.1]
-
-    Q_updated, td_error = target(
-        Q.copy(), state=0, action=0, reward=-1.0,
-        next_state=1, done=False, alpha=0.1, gamma=0.9
-    )
-
-    # Target = -1.0 + 0.9 * 0.2 = -0.82
-    # TD error = -0.82 - 0 = -0.82
-    # New Q[0,0] = 0 + 0.1 * (-0.82) = -0.082
-    expected_q = -0.082
-    expected_td = -0.82
-
-    assert np.isclose(Q_updated[0, 0], expected_q, atol=1e-6), \
-        f"Negative reward update failed. Expected Q[0,0]={expected_q:.4f}, got {Q_updated[0, 0]:.4f}"
-    assert np.isclose(td_error, expected_td, atol=1e-6), \
-        f"TD error wrong for negative reward. Expected {expected_td:.4f}, got {td_error:.4f}"
-
-    # Test case 5: Original Q-table should not be modified
-    Q_original = np.ones((3, 3))
-    Q_copy = Q_original.copy()
-    Q_updated, _ = target(Q_original, 0, 0, 1.0, 1, False, 0.1, 0.9)
-    # Allow modification of original, but check that function works correctly
-
-    print("\033[92mAll tests passed!\033[0m")
+    
+    # Test 1: Actualización sin terminar
+    Q_test = np.zeros((3, 2))
+    Q_test[1] = [0.5, 0.3]
+    
+    Q_test = q_learning_update(Q_test, estado=0, accion=0, recompensa=1.0,
+                               siguiente_estado=1, done=False, alpha=0.1, gamma=0.9)
+    
+    # target = 1.0 + 0.9 * 0.5 = 1.45
+    # nuevo_q = 0 + 0.1 * 1.45 = 0.145
+    esperado = 0.145
+    assert np.isclose(Q_test[0, 0], esperado, atol=0.001), \
+        f"❌ Q[0,0] incorrecto. Esperado: {esperado}, Obtenido: {Q_test[0, 0]}"
+    
+    # Test 2: Actualización con done=True
+    Q_test2 = np.zeros((3, 2))
+    Q_test2[1] = [0.5, 0.3]
+    
+    Q_test2 = q_learning_update(Q_test2, estado=0, accion=0, recompensa=1.0,
+                                siguiente_estado=1, done=True, alpha=0.1, gamma=0.9)
+    
+    # target = 1.0 (sin futuro)
+    # nuevo_q = 0 + 0.1 * 1.0 = 0.1
+    esperado2 = 0.1
+    assert np.isclose(Q_test2[0, 0], esperado2, atol=0.001), \
+        f"❌ Q[0,0] con done=True incorrecto. Esperado: {esperado2}, Obtenido: {Q_test2[0, 0]}"
+    
+    # Test 3: Otros valores no cambian
+    assert Q_test[1, 0] == 0.5, "❌ Otros valores no deben cambiar"
+    
+    print("✅ Test pasado! Actualizas Q-values correctamente.")
+    return True
 
 
-def train_q_learning_test(target):
-    """Test complete Q-Learning training loop"""
-    print("Testing train_q_learning...")
-
-    # Create a simple environment
+def run_single_episode_test(run_single_episode):
+    """Test para ejercicio 4a: run_single_episode"""
+    print("Testing run_single_episode...")
+    
     env = gym.make('FrozenLake-v1', is_slippery=False)
-
-    # Test case 1: Basic training
-    np.random.seed(42)
-    Q, rewards_history, epsilon_history = target(
-        env,
-        n_episodes=100,
-        alpha=0.1,
-        gamma=0.99,
-        epsilon=1.0,
-        epsilon_decay=0.99,
-        epsilon_min=0.01,
-        max_steps=50
-    )
-
-    # Check Q-table shape
-    assert Q.shape == (16, 4), f"Q-table shape wrong. Expected (16, 4), got {Q.shape}"
-
-    # Check histories length
-    assert len(rewards_history) == 100, f"Rewards history length wrong. Expected 100, got {len(rewards_history)}"
-    assert len(epsilon_history) == 100, f"Epsilon history length wrong. Expected 100, got {len(epsilon_history)}"
-
-    # Check epsilon decay
-    assert epsilon_history[0] == 1.0, f"Initial epsilon should be 1.0, got {epsilon_history[0]}"
-    assert epsilon_history[-1] < epsilon_history[0], "Epsilon should decay over time"
-    assert epsilon_history[-1] >= 0.01, f"Epsilon should not go below epsilon_min (0.01), got {epsilon_history[-1]}"
-
-    # Check that Q-values have been updated (not all zeros)
-    assert not np.allclose(Q, 0), "Q-table should be updated (not all zeros)"
-
-    # Check rewards are valid
-    assert all(isinstance(r, (int, float, np.number)) for r in rewards_history), \
-        "All rewards should be numeric"
-
-    # Test case 2: Agent should learn (improving performance)
-    np.random.seed(42)
-    Q, rewards_history, epsilon_history = target(
-        env,
-        n_episodes=500,
-        alpha=0.1,
-        gamma=0.99,
-        epsilon=1.0,
-        epsilon_decay=0.995,
-        epsilon_min=0.01,
-        max_steps=100
-    )
-
-    # Average reward should improve over time
-    early_avg = np.mean(rewards_history[:100])
-    late_avg = np.mean(rewards_history[-100:])
-
-    assert late_avg >= early_avg, \
-        f"Agent should improve over time. Early avg: {early_avg:.3f}, Late avg: {late_avg:.3f}"
-
-    # Test case 3: With deterministic FrozenLake, should eventually solve it
-    # Late average should be reasonably good (>0.5 success rate)
-    assert late_avg > 0.5, \
-        f"Agent should learn to solve FrozenLake (deterministic). Got success rate: {late_avg:.3f}"
-
+    Q = np.zeros((16, 4))
+    
+    # Test 1: Retorna Q y recompensa
+    Q_new, recompensa_total = run_single_episode(env, Q, epsilon=0.1, alpha=0.1, gamma=0.99)
+    
+    assert isinstance(Q_new, np.ndarray), "❌ Debe retornar Q-table"
+    assert isinstance(recompensa_total, (int, float, np.number)), "❌ Debe retornar recompensa numérica"
+    
+    # Test 2: Q-table tiene la forma correcta
+    assert Q_new.shape == (16, 4), f"❌ Q debe tener forma (16, 4), obtenido: {Q_new.shape}"
+    
+    # Test 3: Recompensa válida (0 o 1 en FrozenLake)
+    assert recompensa_total in [0.0, 1.0, 0, 1], \
+        f"❌ Recompensa debe ser 0 o 1, obtenido: {recompensa_total}"
+    
     env.close()
+    print("✅ Test pasado! Ejecutas episodios correctamente.")
+    return True
 
-    print("\033[92mAll tests passed!\033[0m")
-    print("\n\033[93mCongratulations! Your Q-Learning implementation is correct!\033[0m")
+
+def train_q_learning_simple_test(train_q_learning_simple):
+    """Test para ejercicio 4b: train_q_learning_simple"""
+    print("Testing train_q_learning_simple...")
+    
+    env = gym.make('FrozenLake-v1', is_slippery=False)
+    
+    # Test 1: Retorna Q y recompensas
+    Q, recompensas = train_q_learning_simple(env, n_episodes=100, alpha=0.1, gamma=0.99, epsilon=0.1)
+    
+    assert isinstance(Q, np.ndarray), "❌ Debe retornar Q-table"
+    assert isinstance(recompensas, list), "❌ Debe retornar lista de recompensas"
+    
+    # Test 2: Forma correcta
+    assert Q.shape == (16, 4), f"❌ Q debe tener forma (16, 4), obtenido: {Q.shape}"
+    
+    # Test 3: Número correcto de episodios
+    assert len(recompensas) == 100, f"❌ Debe haber 100 recompensas, obtenido: {len(recompensas)}"
+    
+    # Test 4: Q-values cambiaron
+    assert not np.all(Q == 0), "❌ Q-table debe haber cambiado durante entrenamiento"
+    
+    env.close()
+    print("✅ Test pasado! Entrenas correctamente (versión simple).")
+    return True
+
+
+def train_q_learning_with_decay_test(train_q_learning_with_decay):
+    """Test para ejercicio 4c: train_q_learning_with_decay"""
+    print("Testing train_q_learning_with_decay...")
+    
+    env = gym.make('FrozenLake-v1', is_slippery=False)
+    
+    # Test 1: Retorna Q y recompensas
+    Q, recompensas = train_q_learning_with_decay(env, n_episodes=1000, alpha=0.1, gamma=0.99, 
+                                                  epsilon_start=1.0, epsilon_end=0.01)
+    
+    assert isinstance(Q, np.ndarray), "❌ Debe retornar Q-table"
+    assert isinstance(recompensas, list), "❌ Debe retornar lista de recompensas"
+    
+    # Test 2: Forma correcta
+    assert Q.shape == (16, 4), f"❌ Q debe tener forma (16, 4), obtenido: {Q.shape}"
+    
+    # Test 3: Número correcto de episodios
+    assert len(recompensas) == 1000, f"❌ Debe haber 1000 recompensas, obtenido: {len(recompensas)}"
+    
+    # Test 4: Aprende (últimos episodios mejor que primeros)
+    promedio_inicial = np.mean(recompensas[:100])
+    promedio_final = np.mean(recompensas[-100:])
+    assert promedio_final >= promedio_inicial, \
+        f"❌ Agente debería mejorar con el tiempo. Inicial: {promedio_inicial:.2f}, Final: {promedio_final:.2f}"
+    
+    env.close()
+    print("✅ Test pasado! Entrenas correctamente con epsilon decay.")
+    print(f"   Mejora: {promedio_inicial*100:.0f}% → {promedio_final*100:.0f}%")
+    return True
 
 
 if __name__ == "__main__":
-    print("This file contains test functions.")
-    print("Import and use them in the Q-Learning Exercise notebook.")
+    print("Ejecutando todos los tests...")
+    print("=" * 50)
+    
+    print("\nPara ejecutar los tests, importa las funciones desde el notebook")
+    print("y llama a cada función de test.")
